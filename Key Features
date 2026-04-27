@@ -5,3 +5,4 @@
 - Dynamic path creation that affects gameplay strategy 
 - Obstacles placed across the map for added difficulty  
 - Self-collision system (cannot cross your own path)  
+- Survival-based gameplay with increasing challenge  
