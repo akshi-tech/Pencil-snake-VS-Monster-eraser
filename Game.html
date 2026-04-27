@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pencil Snake vs Monster Eraser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+        
+        body {
+            background-color: #e5e5e5;
+            font-family: 'Architects Daughter', cursive;
+            touch-action: none;
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 2px solid #999;
+            background-color: white;
+            user-select: none;
+            transition: background 0.3s;
+        }
+
+        /* Background Design Styles */
+        .bg-grid {
+            background-image: 
+                linear-gradient(#f0f0f0 1.1px, transparent 1.1px),
+                linear-gradient(90deg, #f0f0f0 1.1px, transparent 1.1px);
+            background-size: 20px 20px;
+        }
+        .bg-lined {
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 24px;
+        }
+        .bg-dots {
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        canvas {
+            display: block;
+            background: transparent;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            pointer-events: none;
+            color: #333;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .game-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 4px solid #333;
+            text-align: center;
+            z-index: 50;
+            width: 90%;
+            max-width: 440px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dpad-btn {
+            background: #fff;
+            border: 2px solid #333;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            touch-action: manipulation;
+            cursor: pointer;
+        }
+        
+        .dpad-btn:active {
+            background: #eee;
+        }
+
+        #ai-bubble {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 2px solid #f472b6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #db2777;
+            max-width: 80%;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .key-cap {
+            display: inline-block;
+            border: 2px solid #333;
+            border-bottom: 4px solid #333;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 12px;
+            background: #fff;
+            margin: 0 2px;
+        }
+
+        .key-active {
+            background: #fbbf24 !important;
+            transform: translateY(2px);
+            border-bottom-width: 2px !important;
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            cursor: pointer;
+            display: inline-block;
+            margin: 0 4px;
+            vertical-align: middle;
+        }
+
+        .color-swatch.selected {
+            outline: 3px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .design-btn {
+            padding: 4px 8px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        .design-btn.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        @media (min-width: 769px) {
+            .dpad { display: none; }
+        }
+
+        @keyframes victory-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        .victory-crown {
+            animation: victory-float 2s ease-in-out infinite;
+        }
+        
+        .how-to-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container" class="bg-grid">
+    <div class="ui-overlay">
+        <div>
+            <div class="text-xl font-bold">Score: <span id="score">0</span></div>
+            <div class="text-sm">Eraser: <span id="gap">Waiting...</span></div>
+        </div>
+        <div id="status-alert" class="font-bold text-red-500 animate-pulse"></div>
+        <div id="prompt-display" class="text-xs text-blue-500 max-w-[150px] text-right italic"></div>
+    </div>
+    
+    <canvas id="gameCanvas"></canvas>
+    <div id="ai-bubble"></div>
+
+    <!-- Start Screen -->
+    <div id="start-modal" class="game-modal">
+        <h1 class="text-3xl font-bold mb-2">Pencil Snake</h1>
+        
+        <div id="daily-challenge" class="mb-4 text-sm bg-blue-50 p-2 rounded border border-blue-200 min-h-[40px]">
+            Loading daily sketch prompt...
+        </div>
+
+        <div class="mb-4 grid grid-cols-1 gap-2 text-xs">
+            <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
+                <p class="font-bold">Pencil:</p>
+                <div id="pencil-colors">
+                    <div class="color-swatch selected" style="background: #fbbf24" data-color="#fbbf24"></div>
+                    <div class="color-swatch" style="background: #3b82f6" data-color="#3b82f6"></div>
+                    <div class="color-swatch" style="background: #ef4444" data-color="#ef4444"></div>
+                </div>
+            </div>
+            <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
+                <p class="font-bold">Eraser:</p>
+                <div id="eraser-colors">
+                    <div class="color-swatch selected" style="background: #f472b6" data-color="#f472b6"></div>
+                    <div class="color-swatch" style="background: #a78bfa" data-color="#a78bfa"></div>
+                    <div class="color-swatch" style="background: #9ca3af" data-color="#9ca3af"></div>
+                </div>
+            </div>
+            <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
+                <p class="font-bold">Paper:</p>
+                <div id="bg-designs" class="flex gap-1">
+                    <button class="design-btn selected" data-bg="bg-grid">Grid</button>
+                    <button class="design-btn" data-bg="bg-lined">Lined</button>
+                    <button class="design-btn" data-bg="bg-dots">Dots</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4 p-3 bg-gray-50 border border-gray-200 rounded text-left text-sm">
+            <p class="font-bold mb-2 text-xs uppercase text-gray-500">How to Play & Kill Eraser:</p>
+            <div class="space-y-2">
+                <div class="how-to-step">
+                    <div class="grid grid-cols-3 gap-1 scale-75 origin-left">
+                        <div></div><div class="key-cap" id="demo-up">↑</div><div></div>
+                        <div class="key-cap" id="demo-left">←</div><div class="key-cap" id="demo-down">↓</div><div class="key-cap" id="demo-right">→</div>
+                    </div>
+                    <span class="text-xs">Use arrows to move. Don't hit walls or dots!</span>
+                </div>
+                <div class="how-to-step">
+                    <div class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded text-blue-600 font-bold text-xs">10</div>
+                    <span class="text-xs">Eat until you hit <b>10 points</b> to get <b>Sharpener Power</b>.</span>
+                </div>
+                <div class="how-to-step">
+                    <div class="w-6 h-6 flex items-center justify-center border-2 border-dashed border-blue-600 rounded-full">
+                        <div class="w-2 h-2 bg-blue-600 rounded-full animate-ping"></div>
+                    </div>
+                    <span class="text-xs"><b>To kill Eraser:</b> Loop back and touch your <b>own tail</b> while powered up!</span>
+                </div>
+            </div>
+        </div>
+
+        <button id="start-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 shadow-lg w-full mb-2">START SKETCHING</button>
+        <button id="refresh-prompt-btn" class="text-xs text-blue-600 hover:underline">✨ Change Prompt</button>
+    </div>
+
+    <!-- Superpower Victory Screen -->
+    <div id="victory-modal" class="game-modal hidden">
+        <div class="text-5xl mb-4 victory-crown">👑</div>
+        <h2 id="dynamic-victory-text" class="text-2xl font-bold mb-2 text-blue-600">Finally eraser got erased!</h2>
+        <p class="mb-4 text-sm">The pencil reigns supreme on this paper. No more mistakes!</p>
+        <div class="flex flex-col gap-2">
+            <button id="continue-game-btn" class="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg">CONTINUE (PRACTICE MODE)</button>
+            <button id="victory-bank-btn" class="bg-gray-200 text-gray-700 px-8 py-2 rounded-full font-bold">FINISH & BANK SCORE</button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-modal" class="game-modal hidden">
+        <h1 class="text-3xl font-bold mb-2 text-red-600">ERASED!</h1>
+        <p id="ai-insult" class="text-sm italic mb-4 text-gray-600">"The eraser was just too fast..."</p>
+        <p class="text-xl mb-4">Final Score: <span id="final-score">0</span></p>
+        
+        <div class="flex flex-col gap-2">
+            <button id="retry-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 shadow-lg">PLAY AGAIN</button>
+            <button id="back-btn" class="bg-gray-200 text-gray-700 px-8 py-2 rounded-full font-bold hover:bg-gray-300">BACK TO MENU</button>
+        </div>
+    </div>
+</div>
+
+<div class="dpad">
+    <div></div>
+    <button class="dpad-btn" id="up-btn">UP</button>
+    <div></div>
+    <button class="dpad-btn" id="left-btn">LEFT</button>
+    <button class="dpad-btn" id="down-btn">DOWN</button>
+    <button class="dpad-btn" id="right-btn">RIGHT</button>
+</div>
+
+<script>
+    const apiKey = ""; 
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const finalScoreEl = document.getElementById('final-score');
+    const gapEl = document.getElementById('gap');
+    const startModal = document.getElementById('start-modal');
+    const gameoverModal = document.getElementById('gameover-modal');
+    const victoryModal = document.getElementById('victory-modal');
+    const dailyChallengeEl = document.getElementById('daily-challenge');
+    const promptDisplay = document.getElementById('prompt-display');
+    const aiBubble = document.getElementById('ai-bubble');
+    const aiInsultEl = document.getElementById('ai-insult');
+    const statusAlert = document.getElementById('status-alert');
+    const victoryTextEl = document.getElementById('dynamic-victory-text');
+
+    const GRID_SIZE = 20;
+    let width, height;
+    let snake = [];
+    let obstacles = [];
+    let food = null;
+    let direction = { x: 1, y: 0 };
+    let nextDirection = { x: 1, y: 0 };
+    let score = 0;
+    let isGameOver = false;
+    let isGameRunning = false;
+    let isSuperPowered = false;
+    let eraserExists = true;
+    let gameSpeed = 110; 
+    let tickCounter = 0;
+    let currentPrompt = "";
+
+    // Customizable elements
+    let pencilColor = "#fbbf24";
+    let eraserColor = "#f472b6";
+    let currentBg = "bg-grid";
+
+    // --- Gemini API Functions ---
+
+    async function callGemini(prompt, systemInstruction = "") {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        let retries = 0;
+        const maxRetries = 5;
+        while (retries < maxRetries) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
+                    })
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+            } catch (error) {
+                const delay = Math.pow(2, retries) * 1000;
+                await new Promise(res => setTimeout(res, delay));
+                retries++;
+            }
+        }
+        return "";
+    }
+
+    async function getSketchPrompt() {
+        dailyChallengeEl.innerText = "✨ Thinking of a theme...";
+        const prompt = "Give me a 3-5 word drawing prompt for a pencil drawing game. No quotes.";
+        const result = await callGemini(prompt, "You are a creative art director.");
+        currentPrompt = result.trim() || "A sunny park day";
+        dailyChallengeEl.innerText = "Challenge: " + currentPrompt;
+        promptDisplay.innerText = "Prompt: " + currentPrompt;
+    }
+
+    async function getVictoryMessage() {
+        const prompt = "Write a creative 4-word phrase ending with 'finally eraser got erased!'.";
+        const result = await callGemini(prompt, "You are a witty poet.");
+        if (result) victoryTextEl.innerText = result.trim();
+    }
+
+    // --- Demo Animation ---
+    let demoStep = 0;
+    function runDemo() {
+        if (isGameRunning) return;
+        const keys = ['demo-up', 'demo-right', 'demo-down', 'demo-left'];
+        keys.forEach(k => document.getElementById(k).classList.remove('key-active'));
+        const el = document.getElementById(keys[demoStep % 4]);
+        if (el) el.classList.add('key-active');
+        demoStep++;
+        setTimeout(runDemo, 1000);
+    }
+
+    // --- Core Game Logic ---
+
+    function resize() {
+        const padding = 40;
+        const uiHeight = 350;
+        width = Math.floor(Math.min(window.innerWidth - padding, 500) / GRID_SIZE) * GRID_SIZE;
+        height = Math.floor(Math.min(window.innerHeight - uiHeight, 400) / GRID_SIZE) * GRID_SIZE;
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    function initGame() {
+        snake = [
+            { x: GRID_SIZE * 5, y: GRID_SIZE * 5 },
+            { x: GRID_SIZE * 4, y: GRID_SIZE * 5 },
+            { x: GRID_SIZE * 3, y: GRID_SIZE * 5 }
+        ];
+        direction = { x: 1, y: 0 };
+        nextDirection = { x: 1, y: 0 };
+        score = 0;
+        scoreEl.innerText = score;
+        isGameOver = false;
+        isSuperPowered = false;
+        eraserExists = true;
+        statusAlert.innerText = "";
+        obstacles = [];
+        generateObstacles();
+        spawnFood();
+        isGameRunning = true;
+        gameLoop();
+    }
+
+    function generateObstacles() {
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+            const obs = {
+                x: Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE,
+                y: Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE
+            };
+            const onSnake = snake.some(s => s.x === obs.x && s.y === obs.y);
+            if (onSnake || (obs.y === GRID_SIZE * 5 && obs.x < GRID_SIZE * 10)) {
+                i--; continue;
+            }
+            obstacles.push(obs);
+        }
+    }
+
+    function spawnFood() {
+        while (true) {
+            food = {
+                x: Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE,
+                y: Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE
+            };
+            const onObs = obstacles.some(o => o.x === food.x && o.y === food.y);
+            const onSnake = snake.some(s => s.x === food.x && s.y === food.y);
+            if (!onObs && !onSnake) break;
+        }
+    }
+
+    function update() {
+        if (isGameOver) return;
+        direction = nextDirection;
+        const head = { x: snake[0].x + direction.x * GRID_SIZE, y: snake[0].y + direction.y * GRID_SIZE };
+
+        // Check Collisions
+        // In Superpowered mode, hitting yourself kills the eraser instead of ending game
+        const selfCollision = snake.some(s => s.x === head.x && s.y === head.y);
+        
+        if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height ||
+            obstacles.some(o => o.x === head.x && o.y === head.y) ||
+            (selfCollision && !isSuperPowered)) {
+            endGame();
+            return;
+        }
+
+        // Kill Eraser check if superpower active and self-colliding
+        if (isSuperPowered && selfCollision && eraserExists) {
+            eraserExists = false;
+            statusAlert.innerText = "ERASER POKED!";
+            isGameRunning = false;
+            victoryModal.classList.remove('hidden');
+            getVictoryMessage();
+            return;
+        }
+
+        snake.unshift(head);
+
+        // Check Food
+        if (head.x === food.x && head.y === food.y) {
+            score += 10;
+            scoreEl.innerText = score;
+            spawnFood();
+
+            // Unlock Superpower at 10 score
+            if (score >= 10 && !isSuperPowered) {
+                isSuperPowered = true;
+                statusAlert.innerText = "SHARPENER POWER!";
+            }
+        }
+
+        tickCounter++;
+        
+        if (eraserExists) {
+            // Eraser logic
+            if (tickCounter % 3 === 0) {
+                if (snake.length > 2) {
+                    snake.pop();
+                } else {
+                    endGame();
+                    return;
+                }
+            }
+        } else {
+            // Keep length in practice mode
+            if (snake.length > 10) snake.pop();
+        }
+
+        if (eraserExists) {
+            gapEl.innerText = snake.length < 5 ? "CLOSE!" : "Safe";
+            gapEl.style.color = snake.length < 5 ? "red" : "green";
+        } else {
+            gapEl.innerText = "ERASED";
+            gapEl.style.color = "blue";
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Blots (Obstacles)
+        ctx.fillStyle = '#111';
+        obstacles.forEach(obs => {
+            ctx.beginPath();
+            ctx.arc(obs.x + GRID_SIZE/2, obs.y + GRID_SIZE/2, GRID_SIZE/2.5, 0, Math.PI*2);
+            ctx.fill();
+        });
+
+        // Food
+        ctx.fillStyle = isSuperPowered ? '#3b82f6' : '#f59e0b';
+        ctx.beginPath();
+        ctx.moveTo(food.x + GRID_SIZE/2, food.y + 4);
+        ctx.lineTo(food.x + GRID_SIZE - 4, food.y + GRID_SIZE - 4);
+        ctx.lineTo(food.x + 4, food.y + GRID_SIZE - 4);
+        ctx.fill();
+
+        // Line Trail
+        if (snake.length > 1) {
+            ctx.strokeStyle = isSuperPowered ? "#3b82f6" : "#4b5563";
+            ctx.lineWidth = isSuperPowered ? 4 : 2;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(snake[0].x + GRID_SIZE/2, snake[0].y + GRID_SIZE/2);
+            for(let i=1; i<snake.length; i++) {
+                ctx.lineTo(snake[i].x + GRID_SIZE/2, snake[i].y + GRID_SIZE/2);
+            }
+            ctx.stroke();
+        }
+
+        // Pencil Head
+        const h = snake[0];
+        if(h) {
+            ctx.save();
+            ctx.translate(h.x + GRID_SIZE/2, h.y + GRID_SIZE/2);
+            ctx.rotate(Math.atan2(direction.y, direction.x));
+            ctx.fillStyle = pencilColor;
+            ctx.fillRect(-GRID_SIZE/2, -GRID_SIZE/4, GRID_SIZE/1.2, GRID_SIZE/2);
+            ctx.fillStyle = "#111";
+            ctx.beginPath();
+            ctx.moveTo(GRID_SIZE/3, -GRID_SIZE/8);
+            ctx.lineTo(GRID_SIZE/2, 0);
+            ctx.lineTo(GRID_SIZE/3, GRID_SIZE/8);
+            ctx.fill();
+
+            // Crown for Victory Mode
+            if (!eraserExists) {
+                ctx.rotate(-Math.atan2(direction.y, direction.x));
+                ctx.fillStyle = "gold";
+                ctx.beginPath();
+                ctx.moveTo(-10, -15);
+                ctx.lineTo(-5, -25);
+                ctx.lineTo(0, -15);
+                ctx.lineTo(5, -25);
+                ctx.lineTo(10, -15);
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+
+        // Big Monster Eraser
+        if (eraserExists) {
+            const t = snake[snake.length-1];
+            if(t) {
+                const sz = GRID_SIZE * 1.6;
+                const off = (sz - GRID_SIZE) / 2;
+                ctx.fillStyle = eraserColor;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = "rgba(0,0,0,0.2)";
+                ctx.fillRect(t.x - off, t.y - off, sz, sz);
+                ctx.shadowBlur = 0;
+                
+                // Angry Eyes
+                ctx.fillStyle = "white";
+                ctx.fillRect(t.x + 1, t.y + 4, 6, 6);
+                ctx.fillRect(t.x + GRID_SIZE - 7, t.y + 4, 6, 6);
+                ctx.fillStyle = "black";
+                ctx.fillRect(t.x + 3, t.y + 6, 3, 3);
+                ctx.fillRect(t.x + GRID_SIZE - 6, t.y + 6, 3, 3);
+            }
+        }
+    }
+
+    function endGame() {
+        isGameOver = true;
+        isGameRunning = false;
+        finalScoreEl.innerText = score;
+        gameoverModal.classList.remove('hidden');
+    }
+
+    function gameLoop() {
+        if (!isGameRunning) return;
+        update();
+        draw();
+        setTimeout(gameLoop, gameSpeed);
+    }
+
+    const setDir = (x, y) => {
+        if (x !== 0 && direction.x === 0) nextDirection = {x, y};
+        if (y !== 0 && direction.y === 0) nextDirection = {x, y};
+    };
+
+    window.addEventListener('keydown', e => {
+        if(e.key === 'ArrowUp') setDir(0, -1);
+        if(e.key === 'ArrowDown') setDir(0, 1);
+        if(e.key === 'ArrowLeft') setDir(-1, 0);
+        if(e.key === 'ArrowRight') setDir(1, 0);
+    });
+
+    document.getElementById('up-btn').onclick = () => setDir(0, -1);
+    document.getElementById('down-btn').onclick = () => setDir(0, 1);
+    document.getElementById('left-btn').onclick = () => setDir(-1, 0);
+    document.getElementById('right-btn').onclick = () => setDir(1, 0);
+
+    document.getElementById('start-btn').onclick = () => {
+        startModal.classList.add('hidden');
+        initGame();
+    };
+
+    document.getElementById('retry-btn').onclick = () => {
+        gameoverModal.classList.add('hidden');
+        initGame();
+    };
+
+    document.getElementById('back-btn').onclick = () => {
+        gameoverModal.classList.add('hidden');
+        startModal.classList.remove('hidden');
+        draw(); 
+    };
+
+    document.getElementById('continue-game-btn').onclick = () => {
+        victoryModal.classList.add('hidden');
+        isGameRunning = true;
+        gameLoop();
+    };
+
+    document.getElementById('victory-bank-btn').onclick = () => {
+        victoryModal.classList.add('hidden');
+        endGame();
+    };
+
+    document.getElementById('refresh-prompt-btn').onclick = (e) => {
+        e.stopPropagation();
+        getSketchPrompt();
+    };
+
+    // UI Interactive Handlers
+    document.getElementById('pencil-colors').onclick = (e) => {
+        if (e.target.dataset.color) {
+            pencilColor = e.target.dataset.color;
+            document.querySelectorAll('#pencil-colors .color-swatch').forEach(s => s.classList.remove('selected'));
+            e.target.classList.add('selected');
+            draw();
+        }
+    };
+    document.getElementById('eraser-colors').onclick = (e) => {
+        if (e.target.dataset.color) {
+            eraserColor = e.target.dataset.color;
+            document.querySelectorAll('#eraser-colors .color-swatch').forEach(s => s.classList.remove('selected'));
+            e.target.classList.add('selected');
+            draw();
+        }
+    };
+    document.getElementById('bg-designs').onclick = (e) => {
+        if (e.target.dataset.bg) {
+            const container = document.getElementById('game-container');
+            container.classList.remove(currentBg);
+            currentBg = e.target.dataset.bg;
+            container.classList.add(currentBg);
+            document.querySelectorAll('#bg-designs .design-btn').forEach(b => b.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }
+    };
+
+    window.onload = () => {
+        resize();
+        draw();
+        getSketchPrompt();
+        runDemo();
+    };
+</script>
+</body>
+</html>
