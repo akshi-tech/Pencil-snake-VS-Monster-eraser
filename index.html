@@ -68,7 +68,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background:  ivory;
+            background: ivory;
             padding: 1.5rem;
             border-radius: 8px;
             border: 4px solid #333;
@@ -105,25 +105,6 @@
             background: #eee;
         }
 
-        #ai-bubble {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            border: 2px solid #f472b6;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #db2777;
-            max-width: 80%;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 20;
-        }
-
         .key-cap {
             display: inline-block;
             border: 2px solid #333;
@@ -144,31 +125,33 @@
         }
 
         .color-swatch {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             border: 2px solid #333;
             cursor: pointer;
             display: inline-block;
-            margin: 0 4px;
+            margin: 0 2px;
             vertical-align: middle;
         }
 
         .color-swatch.selected {
-            outline: 3px solid #3b82f6;
-            outline-offset: 2px;
+            outline: 2px solid #3b82f6;
+            outline-offset: 1px;
         }
 
-        .design-btn {
+        .design-btn, .diff-btn {
             padding: 4px 8px;
             border: 2px solid #ccc;
             border-radius: 4px;
-            font-size: 10px;
+            font-size: 11px;
             cursor: pointer;
+            background: #fff;
         }
-        .design-btn.selected {
+        .design-btn.selected, .diff-btn.selected {
             border-color: #3b82f6;
             background: #eff6ff;
+            font-weight: bold;
         }
 
         @media (min-width: 769px) {
@@ -205,33 +188,46 @@
     </div>
     
     <canvas id="gameCanvas"></canvas>
-    <div id="ai-bubble"></div>
 
-    <!-- Start Screen -->
     <div id="start-modal" class="game-modal">
         <h1 class="text-3xl font-bold mb-2">Pencil Snake</h1>
         
-        <div id="daily-challenge" class="mb-4 text-sm bg-blue-50 p-2 rounded border border-blue-200 min-h-[40px]">
+        <div id="daily-challenge" class="mb-3 text-sm bg-blue-50 p-2 rounded border border-blue-200 min-h-[40px]">
             Loading daily sketch prompt...
         </div>
 
-        <div class="mb-4 grid grid-cols-1 gap-2 text-xs">
+        <div class="mb-3 grid grid-cols-1 gap-1.5 text-xs">
+            <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
+                <p class="font-bold">Mode:</p>
+                <div id="diff-modes" class="flex gap-1">
+                    <button class="diff-btn" data-diff="easy">Easy</button>
+                    <button class="diff-btn selected" data-diff="mid">Mid</button>
+                    <button class="diff-btn" data-diff="hard">Too Hard</button>
+                </div>
+            </div>
+
             <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
                 <p class="font-bold">Pencil:</p>
-                <div id="pencil-colors">
+                <div id="pencil-colors" class="flex items-center">
                     <div class="color-swatch selected" style="background: #fbbf24" data-color="#fbbf24"></div>
                     <div class="color-swatch" style="background: #3b82f6" data-color="#3b82f6"></div>
                     <div class="color-swatch" style="background: #ef4444" data-color="#ef4444"></div>
+                    <div class="color-swatch" style="background: #10b981" data-color="#10b981"></div>
+                    <div class="color-swatch" style="background: #8b5cf6" data-color="#8b5cf6"></div>
                 </div>
             </div>
+
             <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
                 <p class="font-bold">Eraser:</p>
-                <div id="eraser-colors">
+                <div id="eraser-colors" class="flex items-center">
                     <div class="color-swatch selected" style="background: #f472b6" data-color="#f472b6"></div>
                     <div class="color-swatch" style="background: #a78bfa" data-color="#a78bfa"></div>
                     <div class="color-swatch" style="background: #9ca3af" data-color="#9ca3af"></div>
+                    <div class="color-swatch" style="background: #f97316" data-color="#f97316"></div>
+                    <div class="color-swatch" style="background: #ec4899" data-color="#ec4899"></div>
                 </div>
             </div>
+
             <div class="p-2 border rounded bg-gray-50 flex items-center justify-between">
                 <p class="font-bold">Paper:</p>
                 <div id="bg-designs" class="flex gap-1">
@@ -242,34 +238,33 @@
             </div>
         </div>
 
-        <div class="mb-4 p-3 bg-gray-50 border border-gray-200 rounded text-left text-sm">
-            <p class="font-bold mb-2 text-xs uppercase text-gray-500">How to Play & Kill Eraser:</p>
-            <div class="space-y-2">
+        <div class="mb-3 p-2.5 bg-gray-50 border border-gray-200 rounded text-left text-xs">
+            <p class="font-bold mb-1 uppercase text-gray-500">How to Play & Kill Eraser:</p>
+            <div class="space-y-1.5">
                 <div class="how-to-step">
-                    <div class="grid grid-cols-3 gap-1 scale-75 origin-left">
+                    <div class="grid grid-cols-3 gap-0.5 scale-75 origin-left">
                         <div></div><div class="key-cap" id="demo-up">↑</div><div></div>
                         <div class="key-cap" id="demo-left">←</div><div class="key-cap" id="demo-down">↓</div><div class="key-cap" id="demo-right">→</div>
                     </div>
-                    <span class="text-xs">Use arrows to move. Don't hit walls or dots!</span>
+                    <span>Use arrows to move. Don't hit walls or dots!</span>
                 </div>
                 <div class="how-to-step">
-                    <div class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded text-blue-600 font-bold text-xs">10</div>
-                    <span class="text-xs">Eat until you hit <b>10 points</b> to get <b>Sharpener Power</b>.</span>
+                    <div class="w-5 h-5 flex items-center justify-center bg-blue-100 rounded text-blue-600 font-bold text-[10px]">10</div>
+                    <span>Get <b>10 points</b> to unlock <b>Sharpener Power</b>.</span>
                 </div>
                 <div class="how-to-step">
-                    <div class="w-6 h-6 flex items-center justify-center border-2 border-dashed border-blue-600 rounded-full">
-                        <div class="w-2 h-2 bg-blue-600 rounded-full animate-ping"></div>
+                    <div class="w-5 h-5 flex items-center justify-center border-2 border-dashed border-blue-600 rounded-full">
+                        <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
                     </div>
-                    <span class="text-xs"><b>To kill Eraser:</b> Loop back and touch your <b>own tail</b> while powered up!</span>
+                    <span><b>To kill Eraser:</b> Loop back and touch your <b>own tail</b> while powered up!</span>
                 </div>
             </div>
         </div>
 
-        <button id="start-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 shadow-lg w-full mb-2">START SKETCHING</button>
+        <button id="start-btn" class="bg-blue-600 text-white px-8 py-2.5 rounded-full font-bold hover:bg-blue-700 shadow-lg w-full mb-1">START SKETCHING</button>
         <button id="refresh-prompt-btn" class="text-xs text-blue-600 hover:underline">✨ Change Prompt</button>
     </div>
 
-    <!-- Superpower Victory Screen -->
     <div id="victory-modal" class="game-modal hidden">
         <div class="text-5xl mb-4 victory-crown">👑</div>
         <h2 id="dynamic-victory-text" class="text-2xl font-bold mb-2 text-blue-600">Finally eraser got erased!</h2>
@@ -280,7 +275,6 @@
         </div>
     </div>
 
-    <!-- Game Over Screen -->
     <div id="gameover-modal" class="game-modal hidden">
         <h1 class="text-3xl font-bold mb-2 text-red-600">ERASED!</h1>
         <p id="ai-insult" class="text-sm italic mb-4 text-gray-600">"The eraser was just too fast..."</p>
@@ -314,8 +308,6 @@
     const victoryModal = document.getElementById('victory-modal');
     const dailyChallengeEl = document.getElementById('daily-challenge');
     const promptDisplay = document.getElementById('prompt-display');
-    const aiBubble = document.getElementById('ai-bubble');
-    const aiInsultEl = document.getElementById('ai-insult');
     const statusAlert = document.getElementById('status-alert');
     const victoryTextEl = document.getElementById('dynamic-victory-text');
 
@@ -331,40 +323,36 @@
     let isGameRunning = false;
     let isSuperPowered = false;
     let eraserExists = true;
-    let gameSpeed = 110; 
     let tickCounter = 0;
     let currentPrompt = "";
 
-    // Customizable elements
+    // Customizable configurations
     let pencilColor = "#fbbf24";
     let eraserColor = "#f472b6";
     let currentBg = "bg-grid";
+    let difficulty = "mid";
+    let gameSpeed = 120;
+    let obstacleCount = 12;
+    let eraserSpeedTicks = 3; // Every X frames eraser eats tail
 
     // --- Gemini API Functions ---
-
     async function callGemini(prompt, systemInstruction = "") {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-        let retries = 0;
-        const maxRetries = 5;
-        while (retries < maxRetries) {
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
-                    })
-                });
-                const data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-            } catch (error) {
-                const delay = Math.pow(2, retries) * 1000;
-                await new Promise(res => setTimeout(res, delay));
-                retries++;
-            }
+        if (!apiKey) return "";
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
+                })
+            });
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        } catch (error) {
+            return "";
         }
-        return "";
     }
 
     async function getSketchPrompt() {
@@ -395,7 +383,6 @@
     }
 
     // --- Core Game Logic ---
-
     function resize() {
         const padding = 40;
         const uiHeight = 350;
@@ -405,7 +392,24 @@
         canvas.height = height;
     }
 
+    function applyDifficultySettings() {
+        if (difficulty === "easy") {
+            gameSpeed = 150;
+            obstacleCount = 5;
+            eraserSpeedTicks = 4;
+        } else if (difficulty === "mid") {
+            gameSpeed = 110;
+            obstacleCount = 12;
+            eraserSpeedTicks = 3;
+        } else if (difficulty === "hard") {
+            gameSpeed = 75;
+            obstacleCount = 22;
+            eraserSpeedTicks = 2;
+        }
+    }
+
     function initGame() {
+        applyDifficultySettings();
         snake = [
             { x: GRID_SIZE * 5, y: GRID_SIZE * 5 },
             { x: GRID_SIZE * 4, y: GRID_SIZE * 5 },
@@ -427,8 +431,7 @@
     }
 
     function generateObstacles() {
-        const count = 10;
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < obstacleCount; i++) {
             const obs = {
                 x: Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE,
                 y: Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE
@@ -458,8 +461,6 @@
         direction = nextDirection;
         const head = { x: snake[0].x + direction.x * GRID_SIZE, y: snake[0].y + direction.y * GRID_SIZE };
 
-        // Check Collisions
-        // In Superpowered mode, hitting yourself kills the eraser instead of ending game
         const selfCollision = snake.some(s => s.x === head.x && s.y === head.y);
         
         if (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height ||
@@ -469,7 +470,6 @@
             return;
         }
 
-        // Kill Eraser check if superpower active and self-colliding
         if (isSuperPowered && selfCollision && eraserExists) {
             eraserExists = false;
             statusAlert.innerText = "ERASER POKED!";
@@ -481,13 +481,11 @@
 
         snake.unshift(head);
 
-        // Check Food
         if (head.x === food.x && head.y === food.y) {
             score += 10;
             scoreEl.innerText = score;
             spawnFood();
 
-            // Unlock Superpower at 10 score
             if (score >= 10 && !isSuperPowered) {
                 isSuperPowered = true;
                 statusAlert.innerText = "SHARPENER POWER!";
@@ -497,8 +495,7 @@
         tickCounter++;
         
         if (eraserExists) {
-            // Eraser logic
-            if (tickCounter % 3 === 0) {
+            if (tickCounter % eraserSpeedTicks === 0) {
                 if (snake.length > 2) {
                     snake.pop();
                 } else {
@@ -507,7 +504,6 @@
                 }
             }
         } else {
-            // Keep length in practice mode
             if (snake.length > 10) snake.pop();
         }
 
@@ -523,7 +519,7 @@
     function draw() {
         ctx.clearRect(0, 0, width, height);
 
-        // Blots (Obstacles)
+        // Obstacles
         ctx.fillStyle = '#111';
         obstacles.forEach(obs => {
             ctx.beginPath();
@@ -567,7 +563,6 @@
             ctx.lineTo(GRID_SIZE/3, GRID_SIZE/8);
             ctx.fill();
 
-            // Crown for Victory Mode
             if (!eraserExists) {
                 ctx.rotate(-Math.atan2(direction.y, direction.x));
                 ctx.fillStyle = "gold";
@@ -582,7 +577,7 @@
             ctx.restore();
         }
 
-        // Big Monster Eraser
+        // Monster Eraser
         if (eraserExists) {
             const t = snake[snake.length-1];
             if(t) {
@@ -594,7 +589,6 @@
                 ctx.fillRect(t.x - off, t.y - off, sz, sz);
                 ctx.shadowBlur = 0;
                 
-                // Angry Eyes
                 ctx.fillStyle = "white";
                 ctx.fillRect(t.x + 1, t.y + 4, 6, 6);
                 ctx.fillRect(t.x + GRID_SIZE - 7, t.y + 4, 6, 6);
@@ -695,6 +689,13 @@
             e.target.classList.add('selected');
         }
     };
+    document.getElementById('diff-modes').onclick = (e) => {
+        if (e.target.dataset.diff) {
+            difficulty = e.target.dataset.diff;
+            document.querySelectorAll('#diff-modes .diff-btn').forEach(b => b.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }
+    };
 
     window.onload = () => {
         resize();
@@ -705,3 +706,4 @@
 </script>
 </body>
 </html>
+
