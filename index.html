@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,6 +20,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for mobile browsers */
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
@@ -29,61 +30,60 @@
             color: #1a1a1a;
         }
         body.light-theme #game-container {
-            border-color: #777;
-            background-color: #fffaf0; /* floralwhite */
+            border-color: #4b5563;
+            background-color: #fffaf0; /* floralwhite paper look */
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
         /* Dark Mode Defaults */
         body.dark-theme {
-            background-color: #121214;
+            background-color: #0f172a;
             color: #f3f4f6;
         }
         body.dark-theme #game-container {
-            border-color: #444;
-            background-color: #18181c; /* Chalkboard dark slate */
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border-color: #f59e0b;
+            background-color: #090d16; /* Chalkboard dark slate */
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
         }
 
         #game-container {
             position: relative;
-            z-index: 10;
-            border: 4px solid;
+            border: 6px solid;
             user-select: none;
             transition: background 0.3s, border-color 0.3s;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
+            z-index: 10;
         }
 
-        /* Background Design Styles (Light Theme) */
+        /* Background Grid Styles */
         body.light-theme .bg-grid {
             background-image: 
-                linear-gradient(#ececec 1.1px, transparent 1.1px),
-                linear-gradient(90deg, #ececec 1.1px, transparent 1.1px);
+                linear-gradient(#e5e7eb 1.5px, transparent 1.5px),
+                linear-gradient(90deg, #e5e7eb 1.5px, transparent 1.5px);
             background-size: 20px 20px;
         }
         body.light-theme .bg-lined {
-            background-image: linear-gradient(#e5e7eb 1.1px, transparent 1.1px);
+            background-image: linear-gradient(#93c5fd 1.1px, transparent 1.1px);
             background-size: 100% 24px;
         }
         body.light-theme .bg-dots {
-            background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px);
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
             background-size: 20px 20px;
         }
 
-        /* Background Design Styles (Dark Theme) */
         body.dark-theme .bg-grid {
             background-image: 
-                linear-gradient(#27272a 1.1px, transparent 1.1px),
-                linear-gradient(90deg, #27272a 1.1px, transparent 1.1px);
+                linear-gradient(#1e293b 1.5px, transparent 1.5px),
+                linear-gradient(90deg, #1e293b 1.5px, transparent 1.5px);
             background-size: 20px 20px;
         }
         body.dark-theme .bg-lined {
-            background-image: linear-gradient(#27272a 1.1px, transparent 1.1px);
+            background-image: linear-gradient(#1e293b 1.5px, transparent 1.5px);
             background-size: 100% 24px;
         }
         body.dark-theme .bg-dots {
-            background-image: radial-gradient(#3f3f46 1.5px, transparent 1.5px);
+            background-image: radial-gradient(#334155 2px, transparent 2px);
             background-size: 20px 20px;
         }
 
@@ -98,20 +98,20 @@
             left: 12px;
             right: 12px;
             pointer-events: none;
-            z-index: 10;
+            z-index: 20;
             display: flex;
             justify-content: space-between;
         }
 
-        /* Modals style adapting to Light / Dark themes - position: fixed prevents layout cropping */
+        /* Fixed modals prevent layout cropping on different screens */
         .game-modal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 1.75rem;
+            padding: 1.5rem;
             border-radius: 12px;
-            border: 4px solid #333;
+            border: 4px solid;
             text-align: center;
             z-index: 50;
             width: 92%;
@@ -129,20 +129,20 @@
         }
 
         body.dark-theme .game-modal {
-            background: #202024;
+            background: #1e293b;
             color: #eee;
-            border-color: #fbbf24; /* Golden border in dark mode */
+            border-color: #fbbf24;
         }
 
-        /* 3D background container behind the menu */
+        /* 3D background container fixed behind the menu */
         #three-container {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            pointer-events: none; /* Allows user to click modals without background blockages */
+            pointer-events: none;
             opacity: 1;
             transition: opacity 1s ease;
         }
@@ -184,14 +184,14 @@
         }
 
         body.dark-theme .dpad-btn {
-            background: #27272a;
-            border-color: #616161;
+            background: #334155;
+            border-color: #fbbf24;
             color: #f3f4f6;
-            box-shadow: 0 4px 0 #18181b;
+            box-shadow: 0 4px 0 #0f172a;
         }
         body.dark-theme .dpad-btn:active {
             transform: translateY(3px);
-            box-shadow: 0 1px 0 #18181b;
+            box-shadow: 0 1px 0 #0f172a;
         }
 
         .color-swatch {
@@ -224,7 +224,7 @@
             transition: all 0.2s;
         }
         body.dark-theme .design-btn, body.dark-theme .diff-btn {
-            background: #27272a;
+            background: #334155;
             color: #eee;
             border-color: #4b5563;
         }
@@ -237,7 +237,7 @@
         }
         body.dark-theme .design-btn.selected, body.dark-theme .diff-btn.selected {
             border-color: #fbbf24;
-            background: #3e3e4a;
+            background: #1e293b;
             color: #fbbf24;
         }
 
@@ -269,10 +269,10 @@
         <div id="status-alert" class="font-bold text-red-500 animate-pulse text-sm"></div>
         <div class="flex flex-col items-end gap-1 pointer-events-auto">
             <!-- Theme Toggle Button -->
-            <button id="theme-toggle-btn" class="bg-gray-800 text-white dark:bg-white dark:text-gray-900 px-2 py-1 rounded text-xs font-bold shadow hover:scale-105 transition">
-                🌓 Toggle Theme
+            <button id="theme-toggle-btn" class="bg-gray-800 text-white dark:bg-amber-500 dark:text-gray-950 px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg hover:scale-105 transition">
+                🌓 Switch Light/Dark
             </button>
-            <div id="prompt-display" class="text-[10px] text-blue-500 max-w-[130px] text-right italic"></div>
+            <div id="prompt-display" class="text-[10px] text-blue-500 dark:text-blue-400 max-w-[130px] text-right italic"></div>
         </div>
     </div>
     
@@ -284,13 +284,21 @@
     <h1 class="text-3xl font-bold mb-1 tracking-tight">Pencil Snake</h1>
     <p class="text-xs opacity-75 mb-3">Defeat the erasing giant on paper!</p>
     
-    <div id="daily-challenge" class="mb-3 text-xs bg-blue-50 dark:bg-zinc-800 p-2 rounded border border-blue-200 dark:border-zinc-700 min-h-[38px] flex items-center justify-center">
+    <div id="daily-challenge" class="mb-3 text-xs bg-blue-50 dark:bg-slate-800 p-2 rounded border border-blue-200 dark:border-slate-700 min-h-[38px] flex items-center justify-center">
         Loading daily sketch prompt...
+    </div>
+
+    <!-- Theme Selection Direct Actions -->
+    <div class="mb-3 p-2 border rounded bg-white/50 dark:bg-slate-900/50 flex items-center justify-between text-xs">
+        <p class="font-bold">Workspace View:</p>
+        <button id="modal-theme-toggle" class="bg-gray-800 text-white dark:bg-amber-400 dark:text-slate-900 px-3 py-1 rounded font-bold hover:scale-105 transition text-[11px]">
+            🌓 Toggle Dark Mode
+        </button>
     </div>
 
     <div class="mb-3 grid grid-cols-1 gap-1.5 text-xs text-left">
         <!-- Difficulty Selection -->
-        <div class="p-2 border rounded bg-white/50 dark:bg-zinc-900/50 flex items-center justify-between">
+        <div class="p-2 border rounded bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
             <div>
                 <p class="font-bold">Difficulty:</p>
                 <p class="text-[9px] opacity-75 text-amber-600 dark:text-amber-400 font-semibold" id="diff-goal-hint">Goal: 60 pts to fight back</p>
@@ -304,7 +312,7 @@
         </div>
 
         <!-- Customization Settings -->
-        <div class="p-2 border rounded bg-white/50 dark:bg-zinc-900/50 flex items-center justify-between">
+        <div class="p-2 border rounded bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
             <p class="font-bold">Pencil Ink:</p>
             <div id="pencil-colors" class="flex items-center">
                 <div class="color-swatch selected" style="background: #fbbf24" data-color="#fbbf24"></div>
@@ -315,7 +323,7 @@
             </div>
         </div>
 
-        <div class="p-2 border rounded bg-white/50 dark:bg-zinc-900/50 flex items-center justify-between">
+        <div class="p-2 border rounded bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
             <p class="font-bold">Eraser Body:</p>
             <div id="eraser-colors" class="flex items-center">
                 <div class="color-swatch selected" style="background: #f472b6" data-color="#f472b6"></div>
@@ -326,7 +334,7 @@
             </div>
         </div>
 
-        <div class="p-2 border rounded bg-white/50 dark:bg-zinc-900/50 flex items-center justify-between">
+        <div class="p-2 border rounded bg-white/50 dark:bg-slate-900/50 flex items-center justify-between">
             <p class="font-bold">Paper Canvas:</p>
             <div id="bg-designs" class="flex gap-1">
                 <button class="design-btn selected" data-bg="bg-grid">Grid</button>
@@ -337,24 +345,24 @@
     </div>
 
     <!-- How To Section -->
-    <div class="mb-4 p-2.5 bg-white/70 dark:bg-zinc-900/70 border border-gray-200 dark:border-zinc-700 rounded text-left text-xs">
+    <div class="mb-4 p-2.5 bg-white/70 dark:bg-slate-900/70 border border-gray-200 dark:border-slate-700 rounded text-left text-xs">
         <p class="font-bold mb-1 uppercase tracking-wider text-amber-500">Battle Manual:</p>
         <div class="space-y-1.5 opacity-90">
             <div class="flex items-start gap-1">
                 <span class="font-bold text-amber-500">1.</span>
-                <span>Control the Pencil with keyboard arrows / D-pad. Avoid margins & dangerous graphite points.</span>
+                <span>Control with keyboard arrows / WASD / D-pad. Avoid margins & graphite points.</span>
             </div>
             <div class="flex items-start gap-1">
                 <span class="font-bold text-amber-500">2.</span>
-                <span>The giant **Monster Eraser** is locked to your tail, erasing it relentlessly piece-by-piece!</span>
+                <span>The giant **Monster Eraser** is locked to your tail, erasing it piece-by-piece!</span>
             </div>
             <div class="flex items-start gap-1">
                 <span class="font-bold text-amber-500">3.</span>
-                <span>Reach the **Target Score** to ignite **Sharpener Power** (invincibility & critical sharpness).</span>
+                <span>Reach the **Target Score** to ignite **Sharpener Power** (invincibility).</span>
             </div>
             <div class="flex items-start gap-1">
                 <span class="font-bold text-amber-500">4.</span>
-                <span>**To Erase the Eraser**: Once powered up, form a closed loop and crash into **your own tail** to sever it!</span>
+                <span>**To Erase the Eraser**: Once powered up, loop back and crash into **your own tail** to win!</span>
             </div>
         </div>
     </div>
@@ -414,6 +422,7 @@
     const statusAlert = document.getElementById('status-alert');
     const victoryTextEl = document.getElementById('dynamic-victory-text');
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const modalThemeToggleBtn = document.getElementById('modal-theme-toggle');
     const diffGoalHintEl = document.getElementById('diff-goal-hint');
 
     const GRID_SIZE = 20;
@@ -430,6 +439,25 @@
     let eraserExists = true;
     let tickCounter = 0;
     let currentPrompt = "";
+
+    // Offline Drawing Prompts fallback list when Gemini API is unconfigured
+    const offlinePrompts = [
+        "Cyberpunk robotic ladybug",
+        "Steampunk mechanical hamster",
+        "Medieval dragon doing homework",
+        "A grumpy slice of pepperoni pizza",
+        "Astronaut fishing on a lunar lake",
+        "An ancient temple made of cheese",
+        "Sneaker shoes with butterfly wings",
+        "Cat captain steering a submarine",
+        "A happy cloud crying neon rain",
+        "Self-assembling vintage typewriter",
+        "Fox drinking hot matcha tea",
+        "Surfing penguin under a double rainbow",
+        "Treehouse with giant glowing mushrooms",
+        "Haunted grandfather clock sipping cocoa",
+        "An island floating inside a bottle"
+    ];
 
     // Theme Config (Default light)
     let currentTheme = 'light';
@@ -483,7 +511,6 @@
     }
 
     function playPowerUpSound() {
-        // Sci-Fi sweep
         initAudio();
         const now = audioCtx.currentTime;
         const osc = audioCtx.createOscillator();
@@ -506,13 +533,20 @@
     }
 
     function playWinSound() {
-        // Triumphant chord progression
         const scale = [523.25, 659.25, 783.99, 1046.50]; // C Major Chord
         scale.forEach((freq, idx) => {
             setTimeout(() => {
                 playTone(freq, 0.4, 'triangle', 0.15);
             }, idx * 100);
         });
+    }
+
+    function playCountdownTone(number) {
+        if (number > 0) {
+            playTone(330, 0.15, 'sine', 0.15); // Medium high beep
+        } else {
+            playTone(660, 0.4, 'sawtooth', 0.15); // High start beep
+        }
     }
 
     // --- Gemini Content Generation API ---
@@ -537,158 +571,190 @@
 
     async function getSketchPrompt() {
         dailyChallengeEl.innerText = "✨ Shuffling sketchbook idea...";
-        const prompt = "Provide a wacky 3-5 word drawing challenge for a sketchbook paper aesthetic. Do not use punctuation or quotes.";
-        const result = await callGemini(prompt, "You are an art school professor throwing funny visual design challenges.");
-        currentPrompt = result.trim() || "Retro futuristic mechanical hamster";
+        let promptText = "";
+        
+        if (apiKey) {
+            const prompt = "Provide a wacky 3-5 word drawing challenge for a sketchbook paper aesthetic. Do not use punctuation or quotes.";
+            const result = await callGemini(prompt, "You are an art school professor throwing funny visual design challenges.");
+            promptText = result.trim();
+        }
+
+        // Use local fallback if API request failed or API key was omitted
+        if (!promptText) {
+            const randomIndex = Math.floor(Math.random() * offlinePrompts.length);
+            promptText = offlinePrompts[randomIndex];
+        }
+
+        currentPrompt = promptText;
         dailyChallengeEl.innerText = "Prompt: " + currentPrompt;
         promptDisplay.innerText = "Draft: " + currentPrompt;
     }
 
     async function getVictoryMessage() {
-        const prompt = "Provide a 4-5 word artistic battle victory cheer concluding with the words 'Pencil reigns supreme!'. No punctuation.";
-        const result = await callGemini(prompt, "You are a master of sketch art celebrating graphite supremacy.");
-        if (result) {
-            victoryTextEl.innerText = result.trim();
-        } else {
-            victoryTextEl.innerText = "Victory! Pencil reigns supreme!";
+        let victoryText = "";
+        if (apiKey) {
+            const prompt = "Provide a 4-5 word artistic battle victory cheer concluding with the words 'Pencil reigns supreme!'. No punctuation.";
+            const result = await callGemini(prompt, "You are a master of sketch art celebrating graphite supremacy.");
+            if (result) victoryText = result.trim();
         }
+
+        if (!victoryText) {
+            victoryText = "Victory! Pencil reigns supreme!";
+        }
+        victoryTextEl.innerText = victoryText;
     }
 
     // --- Dynamic Themes Controls ---
     function toggleTheme() {
         const body = document.body;
-        const container = document.getElementById('game-container');
         if (currentTheme === 'light') {
             currentTheme = 'dark';
             body.classList.replace('light-theme', 'dark-theme');
+            if (scene) {
+                scene.background = null;
+                if (dirLight2 && dirLight1) {
+                    dirLight2.intensity = 1.2;
+                    dirLight1.color.setHex(0xf59e0b); // golden chalk lighting
+                }
+            }
         } else {
             currentTheme = 'light';
             body.classList.replace('dark-theme', 'light-theme');
+            if (scene) {
+                scene.background = null;
+                if (dirLight2 && dirLight1) {
+                    dirLight2.intensity = 0.4;
+                    dirLight1.color.setHex(0xffffff); // clean daylight lighting
+                }
+            }
         }
+        draw();
     }
 
     themeToggleBtn.addEventListener('click', toggleTheme);
+    modalThemeToggleBtn.addEventListener('click', toggleTheme);
 
     // --- Three.js interactive 3D Menu Scene Setup ---
     let scene, camera, renderer, pencilMesh, eraserMesh, particles;
-    const threeContainer = document.getElementById('three-container');
+    let dirLight1, dirLight2;
 
     function init3DMenu() {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-        camera.position.z = 25;
+        try {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 25;
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        threeContainer.appendChild(renderer.domElement);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            threeContainer.appendChild(renderer.domElement);
 
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
 
-        const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight1.position.set(5, 10, 7);
-        scene.add(dirLight1);
+            dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight1.position.set(5, 10, 7);
+            scene.add(dirLight1);
 
-        const dirLight2 = new THREE.DirectionalLight(0x3b82f6, 0.4); // Blue accent light
-        dirLight2.position.set(-5, -5, 2);
-        scene.add(dirLight2);
+            dirLight2 = new THREE.DirectionalLight(0x3b82f6, 0.4); // Blue accent light
+            dirLight2.position.set(-5, -5, 2);
+            scene.add(dirLight2);
 
-        // Pencil Group Model Generation
-        const pencilGroup = new THREE.Group();
-        
-        // 1. Pencil main body (Hexagonal Cylinder)
-        const bodyGeo = new THREE.CylinderGeometry(0.5, 0.5, 7, 6);
-        const bodyMat = new THREE.MeshPhongMaterial({ color: 0xfbbf24, flatShading: true });
-        const pencilBody = new THREE.Mesh(bodyGeo, bodyMat);
-        pencilGroup.add(pencilBody);
+            // Pencil Group Model Generation
+            const pencilGroup = new THREE.Group();
+            
+            // 1. Pencil main body (Hexagonal Cylinder)
+            const bodyGeo = new THREE.CylinderGeometry(0.5, 0.5, 7, 6);
+            const bodyMat = new THREE.MeshPhongMaterial({ color: 0xfbbf24, flatShading: true });
+            const pencilBody = new THREE.Mesh(bodyGeo, bodyMat);
+            pencilGroup.add(pencilBody);
 
-        // 2. Sharpened Wood Cone
-        const woodGeo = new THREE.ConeGeometry(0.5, 1.2, 6);
-        const woodMat = new THREE.MeshPhongMaterial({ color: 0xdfc19a, flatShading: true });
-        const pencilWood = new THREE.Mesh(woodGeo, woodMat);
-        pencilWood.position.y = 4.1; // stack on cylinder
-        pencilGroup.add(pencilWood);
+            // 2. Wood Cone
+            const woodGeo = new THREE.ConeGeometry(0.5, 1.2, 6);
+            const woodMat = new THREE.MeshPhongMaterial({ color: 0xdfc19a, flatShading: true });
+            const pencilWood = new THREE.Mesh(woodGeo, woodMat);
+            pencilWood.position.y = 4.1;
+            pencilGroup.add(pencilWood);
 
-        // 3. Graphite cone tip
-        const leadGeo = new THREE.ConeGeometry(0.15, 0.4, 6);
-        const leadMat = new THREE.MeshPhongMaterial({ color: 0x333333, flatShading: true });
-        const pencilLead = new THREE.Mesh(leadGeo, leadMat);
-        pencilLead.position.y = 4.6;
-        pencilGroup.add(pencilLead);
+            // 3. Graphite cone tip
+            const leadGeo = new THREE.ConeGeometry(0.15, 0.4, 6);
+            const leadMat = new THREE.MeshPhongMaterial({ color: 0x333333, flatShading: true });
+            const pencilLead = new THREE.Mesh(leadGeo, leadMat);
+            pencilLead.position.y = 4.6;
+            pencilGroup.add(pencilLead);
 
-        // 4. Metal Collar (Ferrule)
-        const metalGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 12);
-        const metalMat = new THREE.MeshPhongMaterial({ color: 0x9ca3af, shininess: 80 });
-        const metalCollar = new THREE.Mesh(metalGeo, metalMat);
-        metalCollar.position.y = -3.8;
-        pencilGroup.add(metalCollar);
+            // 4. Metal Collar (Ferrule)
+            const metalGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.6, 12);
+            const metalMat = new THREE.MeshPhongMaterial({ color: 0x9ca3af, shininess: 80 });
+            const metalCollar = new THREE.Mesh(metalGeo, metalMat);
+            metalCollar.position.y = -3.8;
+            pencilGroup.add(metalCollar);
 
-        // 5. Eraser Tip
-        const eraserGeo = new THREE.CylinderGeometry(0.48, 0.48, 0.8, 12);
-        const eraserMat = new THREE.MeshPhongMaterial({ color: 0xf472b6, flatShading: true });
-        const eraserTip = new THREE.Mesh(eraserGeo, eraserMat);
-        eraserTip.position.y = -4.5;
-        pencilGroup.add(eraserTip);
+            // 5. Eraser Tip
+            const eraserGeo = new THREE.CylinderGeometry(0.48, 0.48, 0.8, 12);
+            const eraserMat = new THREE.MeshPhongMaterial({ color: 0xf472b6, flatShading: true });
+            const eraserTip = new THREE.Mesh(eraserGeo, eraserMat);
+            eraserTip.position.y = -4.5;
+            pencilGroup.add(eraserTip);
 
-        pencilMesh = pencilGroup;
-        pencilMesh.position.set(-5, 2, 0);
-        pencilMesh.rotation.set(0.3, 0.5, -0.6);
-        scene.add(pencilMesh);
+            pencilMesh = pencilGroup;
+            pencilMesh.position.set(-5, 2, 0);
+            pencilMesh.rotation.set(0.3, 0.5, -0.6);
+            scene.add(pencilMesh);
 
-        // 3D Eraser Model Generation
-        const eraserGeoBox = new THREE.BoxGeometry(3, 1.8, 1.2);
-        const eraserMatBox = new THREE.MeshPhongMaterial({ color: 0xf472b6, flatShading: true });
-        eraserMesh = new THREE.Mesh(eraserGeoBox, eraserMatBox);
-        eraserMesh.position.set(5, -2, 0);
-        eraserMesh.rotation.set(-0.2, -0.4, 0.4);
-        scene.add(eraserMesh);
+            // 3D Eraser Model Generation
+            const eraserGeoBox = new THREE.BoxGeometry(3, 1.8, 1.2);
+            const eraserMatBox = new THREE.MeshPhongMaterial({ color: 0xf472b6, flatShading: true });
+            eraserMesh = new THREE.Mesh(eraserGeoBox, eraserMatBox);
+            eraserMesh.position.set(5, -2, 0);
+            eraserMesh.rotation.set(-0.2, -0.4, 0.4);
+            scene.add(eraserMesh);
 
-        // Dynamic wood-shavings particle ring
-        const particleCount = 100;
-        const particleGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
+            // Dynamic wood-shavings particle ring
+            const particleCount = 100;
+            const particleGeo = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
 
-        const yellowColor = new THREE.Color(0xfbbf24);
-        const woodColor = new THREE.Color(0xdfc19a);
+            const yellowColor = new THREE.Color(0xfbbf24);
+            const woodColor = new THREE.Color(0xdfc19a);
 
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            // spherical coordinates positioning
-            const radius = 8 + Math.random() * 6;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos((Math.random() * 2) - 1);
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                const radius = 8 + Math.random() * 6;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
 
-            positions[i] = radius * Math.sin(phi) * Math.cos(theta);
-            positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-            positions[i + 2] = radius * Math.cos(phi);
+                positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                positions[i + 2] = radius * Math.cos(phi);
 
-            // Shaded wood & lead colored particles
-            const pickedColor = Math.random() > 0.5 ? yellowColor : woodColor;
-            colors[i] = pickedColor.r;
-            colors[i+1] = pickedColor.g;
-            colors[i+2] = pickedColor.b;
+                const pickedColor = Math.random() > 0.5 ? yellowColor : woodColor;
+                colors[i] = pickedColor.r;
+                colors[i+1] = pickedColor.g;
+                colors[i+2] = pickedColor.b;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const matParticle = new THREE.PointsMaterial({
+                size: 0.18,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            particles = new THREE.Points(particleGeo, matParticle);
+            scene.add(particles);
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onWindowResize);
+
+            animate3DMenu();
+        } catch (e) {
+            console.warn("Three.js 3D initialisation bypassed or unsupported on this device: ", e);
         }
-
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const matParticle = new THREE.PointsMaterial({
-            size: 0.18,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.8
-        });
-
-        particles = new THREE.Points(particleGeo, matParticle);
-        scene.add(particles);
-
-        // Listeners for mouse tracking parallax effect
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('resize', onWindowResize);
-
-        animate3DMenu();
     }
 
     let mouseX = 0, mouseY = 0;
@@ -705,12 +771,10 @@
         }
     }
 
-    // Primary 3D Animation Render loop
     function animate3DMenu() {
         if (!scene) return;
         requestAnimationFrame(animate3DMenu);
 
-        // Rotation
         if (pencilMesh) {
             pencilMesh.rotation.y += 0.01;
             pencilMesh.rotation.x += 0.005;
@@ -723,35 +787,52 @@
             particles.rotation.y += 0.002;
         }
 
-        // Camera orbit float based on mouse positions
-        camera.position.x += (mouseX - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY - camera.position.y) * 0.05;
-        camera.lookAt(scene.position);
+        if (camera) {
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+        }
 
-        renderer.render(scene, camera);
+        if (renderer && scene && camera) {
+            renderer.render(scene, camera);
+        }
     }
 
     function fadeOut3DScene() {
-        threeContainer.style.opacity = '0';
-        setTimeout(() => {
-            threeContainer.style.display = 'none';
-        }, 1000);
+        const container = document.getElementById('three-container');
+        if (container) {
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 1000);
+        }
     }
 
     function fadeIn3DScene() {
-        threeContainer.style.display = 'block';
-        setTimeout(() => {
-            threeContainer.style.opacity = '1';
-        }, 10);
+        const container = document.getElementById('three-container');
+        if (container) {
+            container.style.display = 'block';
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 10);
+        }
     }
 
 
-    // --- 2D Snake Engine Core Logic ---
+    // --- Responsive Sizing Updates ---
     function resize() {
-        const padding = 40;
-        const uiHeight = 350;
-        width = Math.floor(Math.min(window.innerWidth - padding, 500) / GRID_SIZE) * GRID_SIZE;
-        height = Math.floor(Math.min(window.innerHeight - uiHeight, 400) / GRID_SIZE) * GRID_SIZE;
+        const padding = 32;
+        const maxW = 500;
+        const maxH = 400;
+
+        let w = Math.floor(Math.min(window.innerWidth - padding, maxW) / GRID_SIZE) * GRID_SIZE;
+        let h = Math.floor(Math.min(window.innerHeight - 260, maxH) / GRID_SIZE) * GRID_SIZE;
+
+        if (w < 280) w = 280;
+        if (h < 260) h = 260;
+
+        width = w;
+        height = h;
         canvas.width = width;
         canvas.height = height;
     }
@@ -769,18 +850,73 @@
             targetScore = 60;
         } else if (difficulty === "hard") {
             gameSpeed = 85;
-            obstacleCount = 18;
+            obstacleCount = 16;
             eraserSpeedTicks = 2;
             targetScore = 80;
         } else if (difficulty === "super") {
-            gameSpeed = 60;
-            obstacleCount = 25;
+            gameSpeed = 65;
+            obstacleCount = 22;
             eraserSpeedTicks = 2;
             targetScore = 100;
         }
         
         targetDisplayEl.innerText = targetScore;
         diffGoalHintEl.innerText = `Goal: ${targetScore} pts to fight back`;
+    }
+
+    // --- Game Start Countdown Loop ---
+    let countdownActive = false;
+    let countdownVal = 3;
+
+    function playIntroCountdown(completionCallback) {
+        countdownActive = true;
+        countdownVal = 3;
+
+        function runStep() {
+            if (countdownVal > 0) {
+                playCountdownTone(countdownVal);
+                drawCountdownScreen(countdownVal);
+                countdownVal--;
+                setTimeout(runStep, 900);
+            } else {
+                playCountdownTone(0);
+                countdownActive = false;
+                completionCallback();
+            }
+        }
+        runStep();
+    }
+
+    function drawCountdownScreen(num) {
+        ctx.clearRect(0, 0, width, height);
+        const isDark = currentTheme === 'dark';
+
+        // Draft Borders Animation on intro
+        ctx.strokeStyle = isDark ? "#fbbf24" : "#4b5563";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(5, 5, width - 10, height - 10);
+
+        // Sketch Grid Background simulation
+        ctx.strokeStyle = isDark ? "#1e293b" : "#e5e7eb";
+        ctx.lineWidth = 1;
+        for (let i = 20; i < width; i += 20) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, height); ctx.stroke();
+        }
+        for (let j = 20; j < height; j += 20) {
+            ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(width, j); ctx.stroke();
+        }
+
+        // Draw Countdown Numbers
+        ctx.fillStyle = isDark ? "#fbbf24" : "#2563eb";
+        ctx.font = "bold 80px 'Architects Daughter'";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(num, width / 2, height / 2);
+
+        // Subtext
+        ctx.font = "20px 'Architects Daughter'";
+        ctx.fillStyle = isDark ? "#94a3b8" : "#475569";
+        ctx.fillText("PREPARING SKETCH...", width / 2, height / 2 + 70);
     }
 
     function initGame() {
@@ -801,22 +937,28 @@
         isSuperPowered = false;
         eraserExists = true;
         statusAlert.innerText = "";
+        
         obstacles = [];
         generateObstacles();
         spawnFood();
-        isGameRunning = true;
-        gameLoop();
+
+        playIntroCountdown(() => {
+            isGameRunning = true;
+            gameLoop();
+        });
     }
 
     function generateObstacles() {
+        // Safe spawning buffer: Ensure obstacles don't block the initial straight path
         for (let i = 0; i < obstacleCount; i++) {
             const obs = {
                 x: Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE,
                 y: Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE
             };
             const onSnake = snake.some(s => s.x === obs.x && s.y === obs.y);
-            // Don't place too close to spawn point
-            if (onSnake || (obs.y === GRID_SIZE * 5 && obs.x < GRID_SIZE * 10)) {
+            const pathBlocked = (obs.y === GRID_SIZE * 5 && obs.x < GRID_SIZE * 11); // Buffer 11 grids horizontally
+
+            if (onSnake || pathBlocked || obs.x >= width || obs.y >= height || obs.x < 0 || obs.y < 0) {
                 i--; continue;
             }
             obstacles.push(obs);
@@ -831,7 +973,8 @@
             };
             const onObs = obstacles.some(o => o.x === food.x && o.y === food.y);
             const onSnake = snake.some(s => s.x === food.x && s.y === food.y);
-            if (!onObs && !onSnake) break;
+            const outOfBounds = food.x >= width || food.y >= height;
+            if (!onObs && !onSnake && !outOfBounds) break;
         }
     }
 
@@ -840,7 +983,6 @@
         direction = nextDirection;
         const head = { x: snake[0].x + direction.x * GRID_SIZE, y: snake[0].y + direction.y * GRID_SIZE };
 
-        // Self-collision tracking
         const selfCollision = snake.some(s => s.x === head.x && s.y === head.y);
         
         // Boundaries and Collisions checking
@@ -851,10 +993,10 @@
             return;
         }
 
-        // Loop execution check (Erase the Eraser)
+        // Loop collision condition (Defeat the Eraser)
         if (isSuperPowered && selfCollision && eraserExists) {
             eraserExists = false;
-            statusAlert.innerText = "ERASER OBLITERATED!";
+            statusAlert.innerText = "ERASER ERADICATED!";
             playWinSound();
             isGameRunning = false;
             victoryModal.classList.remove('hidden');
@@ -871,17 +1013,17 @@
             playScoreSound();
             spawnFood();
 
-            // Check dynamic target victory activation conditions
+            // Trigger Sharpener Power
             if (score >= targetScore && !isSuperPowered) {
                 isSuperPowered = true;
-                statusAlert.innerText = "SHARPENER POWER ON!";
+                statusAlert.innerText = "SHARPENER POWER ACTIVE!";
                 playPowerUpSound();
             }
         }
 
         tickCounter++;
         
-        // Eraser eats snake tail mechanism
+        // Relentless Eraser Chase Trail Popping mechanism
         if (eraserExists) {
             if (tickCounter % eraserSpeedTicks === 0) {
                 if (snake.length > 2) {
@@ -892,7 +1034,6 @@
                 }
             }
         } else {
-            // Free play post-victory trail shortening safety
             if (snake.length > 10) snake.pop();
         }
 
@@ -905,15 +1046,16 @@
         }
     }
 
-    // --- Dynamic Render Layers (Light & Dark Theme Styling) ---
+    // --- Graphic Rendering Layers ---
     function draw() {
+        if (countdownActive) return; // Prevent loop conflicts during intro count
+        
         ctx.clearRect(0, 0, width, height);
-
         const isDark = currentTheme === 'dark';
 
-        // Obstacles (Stoppers)
+        // Obstacles (Sharp Graphite Points)
         if (obstacles) {
-            ctx.fillStyle = isDark ? '#f43f5e' : '#111827';
+            ctx.fillStyle = isDark ? '#ef4444' : '#111827';
             obstacles.forEach(obs => {
                 ctx.beginPath();
                 ctx.arc(obs.x + GRID_SIZE/2, obs.y + GRID_SIZE/2, GRID_SIZE/2.5, 0, Math.PI*2);
@@ -921,9 +1063,9 @@
             });
         }
 
-        // Food Items - Add guard to prevent TypeError before food is initialized
+        // Food Items
         if (food) {
-            ctx.fillStyle = isSuperPowered ? '#3b82f6' : (isDark ? '#eab308' : '#f59e0b');
+            ctx.fillStyle = isSuperPowered ? '#3b82f6' : (isDark ? '#fbbf24' : '#f59e0b');
             ctx.beginPath();
             ctx.moveTo(food.x + GRID_SIZE/2, food.y + 4);
             ctx.lineTo(food.x + GRID_SIZE - 4, food.y + GRID_SIZE - 4);
@@ -933,12 +1075,12 @@
 
         // Line Trail rendering
         if (snake && snake.length > 1) {
-            ctx.strokeStyle = isSuperPowered ? (isDark ? "#38bdf8" : "#3b82f6") : (isDark ? "#4b5563" : "#71717a");
-            ctx.lineWidth = isSuperPowered ? 5 : 2;
+            ctx.strokeStyle = isSuperPowered ? (isDark ? "#38bdf8" : "#3b82f6") : (isDark ? "#475569" : "#71717a");
+            ctx.lineWidth = isSuperPowered ? 5 : 2.5;
             ctx.lineCap = "round";
             ctx.beginPath();
             ctx.moveTo(snake[0].x + GRID_SIZE/2, snake[0].y + GRID_SIZE/2);
-            for(let i=1; i<snake.length; i++) {
+            for(let i = 1; i < snake.length; i++) {
                 ctx.lineTo(snake[i].x + GRID_SIZE/2, snake[i].y + GRID_SIZE/2);
             }
             ctx.stroke();
@@ -952,27 +1094,27 @@
                 ctx.translate(h.x + GRID_SIZE/2, h.y + GRID_SIZE/2);
                 ctx.rotate(Math.atan2(direction.y, direction.x));
                 
-                // Outer casing
+                // Outer body wood
                 ctx.fillStyle = pencilColor;
                 ctx.fillRect(-GRID_SIZE/2, -GRID_SIZE/4, GRID_SIZE/1.2, GRID_SIZE/2);
                 
-                // Sharp wood tip
-                ctx.fillStyle = isDark ? '#3f3f46' : '#dfc19a';
+                // Sharpened cone wood
+                ctx.fillStyle = isDark ? '#475569' : '#dfc19a';
                 ctx.beginPath();
                 ctx.moveTo(GRID_SIZE/3, -GRID_SIZE/4);
                 ctx.lineTo(GRID_SIZE/2, 0);
                 ctx.lineTo(GRID_SIZE/3, GRID_SIZE/4);
                 ctx.fill();
 
-                // Dark graphite lead tip
-                ctx.fillStyle = isDark ? '#f3f4f6' : '#111';
+                // Dark graphite tip
+                ctx.fillStyle = isDark ? '#f8fafc' : '#111';
                 ctx.beginPath();
                 ctx.moveTo(GRID_SIZE/2.5, -GRID_SIZE/8);
                 ctx.lineTo(GRID_SIZE/2, 0);
                 ctx.lineTo(GRID_SIZE/2.5, GRID_SIZE/8);
                 ctx.fill();
 
-                // If victory and in Practice Mode, draw miniature victory crown
+                // Small victory crown if practice mode
                 if (!eraserExists) {
                     ctx.rotate(-Math.atan2(direction.y, direction.x));
                     ctx.fillStyle = "gold";
@@ -988,7 +1130,7 @@
             }
         }
 
-        // Monster Eraser rendering
+        // Monster Eraser Block
         if (eraserExists && snake && snake.length > 0) {
             const t = snake[snake.length-1];
             if(t) {
@@ -996,20 +1138,16 @@
                 const off = (sz - GRID_SIZE) / 2;
                 ctx.fillStyle = eraserColor;
                 
-                // Outer Shadow glow matching theme
                 ctx.shadowBlur = 8;
-                ctx.shadowColor = isDark ? "rgba(244,114,182,0.6)" : "rgba(0,0,0,0.2)";
-                
-                // Render Rect eraser block
+                ctx.shadowColor = isDark ? "rgba(244,114,182,0.7)" : "rgba(0,0,0,0.2)";
                 ctx.fillRect(t.x - off, t.y - off, sz, sz);
-                ctx.shadowBlur = 0; // reset
+                ctx.shadowBlur = 0;
                 
-                // Eyes drawing
+                // Angry animated eyes
                 ctx.fillStyle = "white";
                 ctx.fillRect(t.x + 1, t.y + 4, 6, 6);
                 ctx.fillRect(t.x + GRID_SIZE - 7, t.y + 4, 6, 6);
                 
-                // Angry pupil drawing
                 ctx.fillStyle = "black";
                 ctx.fillRect(t.x + 3, t.y + 6, 3, 3);
                 ctx.fillRect(t.x + GRID_SIZE - 6, t.y + 6, 3, 3);
@@ -1128,5 +1266,4 @@
 </script>
 </body>
 </html>
-  
    
