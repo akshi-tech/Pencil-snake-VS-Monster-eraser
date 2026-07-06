@@ -1,0 +1,159 @@
+# Changelog – Pencil Snake vs Monster Eraser (Extreme Edition)
+
+## Overview
+
+This release transforms the original **Pencil Snake vs Monster Eraser** into a more polished, responsive, and production-ready web game. The update introduces new gameplay mechanics, improved visuals, enhanced audio, better mobile support, and comprehensive stability improvements while maintaining compatibility with GitHub Pages.
+
+---
+
+## ✨ New Features
+
+### Adaptive Difficulty & Dynamic Win Targets
+
+The victory requirement now scales automatically based on the selected difficulty level.
+
+| Difficulty       | Target Score |
+| ---------------- | -----------: |
+| Easy             |    40 Points |
+| Medium (Default) |    60 Points |
+| Hard             |    80 Points |
+| Super            |   100 Points |
+
+This provides a balanced progression and a more engaging experience across all difficulty levels.
+
+---
+
+### Procedural Audio Engine
+
+Implemented a real-time audio system using the **Web Audio API**, removing the dependency on external sound files.
+
+Generated sound effects include:
+
+* Point collection effects
+* Sharpener Power activation
+* Victory fanfare
+* Game Over effects
+* Countdown timer beeps
+
+All sounds are synthesized directly in the browser, improving reliability and loading performance.
+
+---
+
+### Light & Dark Themes
+
+Added two fully supported visual themes.
+
+#### Sketchbook Theme
+
+* Warm ivory background
+* Charcoal-style graphics
+* Classic notebook appearance
+
+#### Chalkboard Theme
+
+* Dark slate background
+* Neon glowing visuals
+* Enhanced contrast for low-light environments
+
+Theme switching updates the entire interface, including:
+
+* Game canvas
+* UI controls
+* Buttons
+* Modal dialogs
+* 3D scene lighting
+
+---
+
+### Interactive 3D Main Menu
+
+Integrated a dynamic **Three.js** powered background featuring:
+
+* Rotating graphite pencil
+* Floating classic pink eraser
+* Orbiting pencil shavings
+* Mouse and touch parallax effects
+* Smooth animations with dynamic lighting
+
+The result is a more immersive and modern main menu experience.
+
+---
+
+## 🛠 Bug Fixes & Improvements
+
+### Safe Spawn System
+
+Prevented immediate player elimination by introducing a protected spawn area.
+
+Improvements include:
+
+* Safe starting path
+* Controlled obstacle generation
+* Fair gameplay initialization
+
+---
+
+### Responsive Canvas
+
+Resolved layout issues affecting different screen sizes.
+
+Fixes include:
+
+* Correct aspect ratio calculations
+* Improved canvas scaling
+* Fixed mobile boundary collisions
+* Enhanced responsiveness across devices
+
+---
+
+### Responsive Modals
+
+Refactored all modal components for better usability.
+
+Updated:
+
+* Start Modal
+* Victory Modal
+* Game Over Modal
+
+Additional improvements:
+
+* Moved modal containers outside the canvas wrapper
+* Implemented `100dvh` viewport sizing
+* Prevented mobile browser UI clipping
+* Eliminated unwanted scrolling
+
+---
+
+### GitHub Pages Compatibility
+
+Improved deployment stability for static hosting.
+
+#### Offline Prompt Library
+
+Added **30+ built-in creative drawing prompts**.
+
+If no Gemini API key is provided, the game automatically switches to offline prompts without interrupting gameplay.
+
+#### WebGL Fallback Protection
+
+Added graceful fallback handling for browsers or devices without WebGL support.
+
+If hardware acceleration is unavailable:
+
+* The 3D menu is automatically disabled.
+* The core 2D game remains fully playable.
+* Runtime errors are prevented through fallback logic.
+
+---
+
+## 📈 Overall Improvements
+
+* Improved gameplay balancing
+* Enhanced mobile responsiveness
+* Better accessibility
+* Faster loading with no external audio assets
+* More reliable GitHub Pages deployment
+* Modernized user interface
+* Improved performance and stability
+* Production-ready architecture
